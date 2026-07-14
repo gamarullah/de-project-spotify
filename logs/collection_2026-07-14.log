@@ -1,0 +1,120 @@
+======================================
+Collection started: Tue Jul 14 10:10:41 PM WIB 2026
+======================================
+HTTP Error for GET to https://api.spotify.com/v1/audio-features/?ids=4wCD0qOFNRu1Q6O3N6ycm4,4rJsBNuHHpZl8QWdPpUzz7,6NTRD85SQG2PQbxAlBcTdI,5XLXrm5JVMdOus1fWmTOFw,2tZIVD0ZPxpsoFx7hvAjWh,1L2CbnBS9C8uNMbS6GSHer,6TBgnQqDXmGECYuZYgj6DI,27wvjuKafcmKhoLcBcJ0uO,0HiNUFD2ovdPC2p5tbnzCG,1ndUYRPchJVNQCM7XwN7Hq,3qzqexZ8YEYvaLbfGZedfh,13i1xqfyIJrM451izr3M01,5IoZdypWIs02349kPSH2LG,3skn2lauGk7Dx6bVIt5DVj,4zMYxKnm4qpI0F5Na4R2Tv,36zcRIdiJr94WIsWxbNMbU,1yJ5fyqBusR7Verj8JGsKV,4RdRa3qq0GBSKjomxrkh5K,2AnvQvVqWORCmgRzLR0sHe,1TEjSXPdAakDotj2Wji3PU,0DUjvyUU6afa9splXojxjz,61M3DuWap0Y0RcFmWcrcQP,1QbOvACeYanja5pbnJbAmk,5aJg39ukLHsiCtCwoIHcF3,4NF2wkVJMrUipF7UDVmfjn,40wF0SD10vRxmBncXn4nOK,3f7gYMirBEKuc57218BjOY,5lMy5ZvD3aDJhIunlczIWU,0ulpimSr7njRd2UFadBAPv,1gGqSeBtsWhphQNoj8cAuS,7iOkPpQQ0mxIxqg6xxc4Yd,4KBegMBVyHsfC7fPOztTzV,48Wx52SUkWFrYS02Vqu0D3,0MjMqYIYzcCteAs4c0BZGy,0adZjn5WV3b0BcZbvSi0y9,11KmXKbQEjF8fZWNZ9Pxkr,4VnI3WdCgUFzyCjcNJEqeI,0bJ7Fs6uqdILGFy8O7Stz7,7jley98gCQFueQ5MCaFWIb,6ZxPofP51IZY0GOepgf0xQ,3clPsjTbx4UOPMeQn7FZkV,6UlVoivrSMVoyhdc5S2tVk,5rjpob1TGB3yDKhJSxaJLb,7dEfa89dZfo6CQPdsgGCF6,2JiDi0qAXsPwhPqA2qaKGt with Params: {} returned 403 due to None
+
+==================================================
+Spotify Data Collection — 2026-07-14
+==================================================
+
+ Authenticating with Spotify...
+Logged in as: Gilang Amarullah
+
+ Collecting recently played tracks...
+Collected 50 recently played tracks
+Saved: /app/raw/recently_played/2026-07-14.json
+
+ Collecting top tracks...
+ Collected 50 top tracks (4 weeks)
+ Collected 50 top tracks (6 months)
+ Collected 50 top tracks (all time)
+Saved: /app/raw/top_tracks/2026-07-14.json
+
+ Collecting top artists...
+✓ Collected 41 top artists (4 weeks)
+✓ Collected 50 top artists (6 months)
+✓ Collected 50 top artists (all time)
+Saved: /app/raw/top_artists/2026-07-14.json
+
+ Collecting audio features...
+⚠ Audio features endpoint restricted for this app
+  Spotify deprecated this endpoint for new apps
+  Skipping audio features collection
+⚠ Audio features not saved (endpoint restricted)
+
+==================================================
+Collection complete!
+==================================================
+
+✓ Collection completed successfully: Tue Jul 14 10:10:45 PM WIB 2026
+======================================
+======================================
+Collection started: Tue Jul 14 10:27:42 PM WIB 2026
+======================================
+HTTP Error for GET to https://api.spotify.com/v1/audio-features/?ids=3qzqexZ8YEYvaLbfGZedfh,3f7gYMirBEKuc57218BjOY,6K4t31amVTZDgR3sKmwUJJ,4zMYxKnm4qpI0F5Na4R2Tv,36zcRIdiJr94WIsWxbNMbU,13i1xqfyIJrM451izr3M01,6UlVoivrSMVoyhdc5S2tVk,4KBegMBVyHsfC7fPOztTzV,27wvjuKafcmKhoLcBcJ0uO,7jley98gCQFueQ5MCaFWIb,5IoZdypWIs02349kPSH2LG,5MYsvAONqcsIVOwu2HTQ3p,48Wx52SUkWFrYS02Vqu0D3,0DUjvyUU6afa9splXojxjz,5aJg39ukLHsiCtCwoIHcF3,1gGqSeBtsWhphQNoj8cAuS,6ZxPofP51IZY0GOepgf0xQ,3skn2lauGk7Dx6bVIt5DVj,1ndUYRPchJVNQCM7XwN7Hq,43iIQbw5hx986dUEZbr3eN,3clPsjTbx4UOPMeQn7FZkV,5UO8z4lzwYTCPD93n7o0Rm,4RdRa3qq0GBSKjomxrkh5K,11KmXKbQEjF8fZWNZ9Pxkr,1QbOvACeYanja5pbnJbAmk,7iOkPpQQ0mxIxqg6xxc4Yd,5rjpob1TGB3yDKhJSxaJLb,6NTRD85SQG2PQbxAlBcTdI,40wF0SD10vRxmBncXn4nOK,2tZIVD0ZPxpsoFx7hvAjWh,5lMy5ZvD3aDJhIunlczIWU,4rJsBNuHHpZl8QWdPpUzz7,4NF2wkVJMrUipF7UDVmfjn,0HiNUFD2ovdPC2p5tbnzCG,1yJ5fyqBusR7Verj8JGsKV,5XLXrm5JVMdOus1fWmTOFw,1L2CbnBS9C8uNMbS6GSHer,0ulpimSr7njRd2UFadBAPv,4VnI3WdCgUFzyCjcNJEqeI,1TEjSXPdAakDotj2Wji3PU,0adZjn5WV3b0BcZbvSi0y9,4wCD0qOFNRu1Q6O3N6ycm4,7dEfa89dZfo6CQPdsgGCF6,0MjMqYIYzcCteAs4c0BZGy,2AnvQvVqWORCmgRzLR0sHe,61M3DuWap0Y0RcFmWcrcQP with Params: {} returned 403 due to None
+
+==================================================
+Spotify Data Collection — 2026-07-14
+==================================================
+
+ Authenticating with Spotify...
+Logged in as: Gilang Amarullah
+
+ Collecting recently played tracks...
+Collected 50 recently played tracks
+Saved: /app/raw/recently_played/2026-07-14.json
+
+ Collecting top tracks...
+ Collected 50 top tracks (4 weeks)
+ Collected 50 top tracks (6 months)
+ Collected 50 top tracks (all time)
+Saved: /app/raw/top_tracks/2026-07-14.json
+
+ Collecting top artists...
+✓ Collected 41 top artists (4 weeks)
+✓ Collected 50 top artists (6 months)
+✓ Collected 50 top artists (all time)
+Saved: /app/raw/top_artists/2026-07-14.json
+
+ Collecting audio features...
+⚠ Audio features endpoint restricted for this app
+  Spotify deprecated this endpoint for new apps
+  Skipping audio features collection
+⚠ Audio features not saved (endpoint restricted)
+
+==================================================
+Collection complete!
+==================================================
+
+✓ Collection completed successfully: Tue Jul 14 10:27:46 PM WIB 2026
+======================================
+======================================
+Collection started: Tue Jul 14 10:31:09 PM WIB 2026
+======================================
+HTTP Error for GET to https://api.spotify.com/v1/audio-features/?ids=4NF2wkVJMrUipF7UDVmfjn,40wF0SD10vRxmBncXn4nOK,0adZjn5WV3b0BcZbvSi0y9,1QbOvACeYanja5pbnJbAmk,7iOkPpQQ0mxIxqg6xxc4Yd,1L2CbnBS9C8uNMbS6GSHer,7jley98gCQFueQ5MCaFWIb,0ulpimSr7njRd2UFadBAPv,43iIQbw5hx986dUEZbr3eN,27wvjuKafcmKhoLcBcJ0uO,5rjpob1TGB3yDKhJSxaJLb,11KmXKbQEjF8fZWNZ9Pxkr,3qzqexZ8YEYvaLbfGZedfh,5aJg39ukLHsiCtCwoIHcF3,1TEjSXPdAakDotj2Wji3PU,5lMy5ZvD3aDJhIunlczIWU,7dEfa89dZfo6CQPdsgGCF6,2tZIVD0ZPxpsoFx7hvAjWh,4KBegMBVyHsfC7fPOztTzV,36zcRIdiJr94WIsWxbNMbU,4RdRa3qq0GBSKjomxrkh5K,5UO8z4lzwYTCPD93n7o0Rm,3f7gYMirBEKuc57218BjOY,2AnvQvVqWORCmgRzLR0sHe,1yJ5fyqBusR7Verj8JGsKV,5XLXrm5JVMdOus1fWmTOFw,1gGqSeBtsWhphQNoj8cAuS,3skn2lauGk7Dx6bVIt5DVj,5MYsvAONqcsIVOwu2HTQ3p,48Wx52SUkWFrYS02Vqu0D3,6UlVoivrSMVoyhdc5S2tVk,6K4t31amVTZDgR3sKmwUJJ,3clPsjTbx4UOPMeQn7FZkV,4rJsBNuHHpZl8QWdPpUzz7,5IoZdypWIs02349kPSH2LG,4zMYxKnm4qpI0F5Na4R2Tv,0G21yYKMZoHa30cYVi1iA8,13i1xqfyIJrM451izr3M01,6ZxPofP51IZY0GOepgf0xQ,6NTRD85SQG2PQbxAlBcTdI,0DUjvyUU6afa9splXojxjz,4wCD0qOFNRu1Q6O3N6ycm4,4VnI3WdCgUFzyCjcNJEqeI,61M3DuWap0Y0RcFmWcrcQP,0MjMqYIYzcCteAs4c0BZGy,0HiNUFD2ovdPC2p5tbnzCG with Params: {} returned 403 due to None
+
+==================================================
+Spotify Data Collection — 2026-07-14
+==================================================
+
+ Authenticating with Spotify...
+Logged in as: Gilang Amarullah
+
+ Collecting recently played tracks...
+Collected 50 recently played tracks
+Saved: /app/raw/recently_played/2026-07-14.json
+
+ Collecting top tracks...
+ Collected 50 top tracks (4 weeks)
+ Collected 50 top tracks (6 months)
+ Collected 50 top tracks (all time)
+Saved: /app/raw/top_tracks/2026-07-14.json
+
+ Collecting top artists...
+✓ Collected 41 top artists (4 weeks)
+✓ Collected 50 top artists (6 months)
+✓ Collected 50 top artists (all time)
+Saved: /app/raw/top_artists/2026-07-14.json
+
+ Collecting audio features...
+⚠ Audio features endpoint restricted for this app
+  Spotify deprecated this endpoint for new apps
+  Skipping audio features collection
+⚠ Audio features not saved (endpoint restricted)
+
+==================================================
+Collection complete!
+==================================================
+
+✓ Collection completed successfully: Tue Jul 14 10:31:13 PM WIB 2026
+======================================

@@ -1,0 +1,14 @@
+services:
+  spotify-collector:
+    build: .
+    container_name: spotify-collector
+    volumes:
+      - ./raw:/app/raw
+      - ./analytics:/app/analytics
+      - ./scripts:/app/scripts
+      - /home/gamarullah/.secrets:/root/.secrets
+    environment:
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - SPOTIFY_REDIRECT_URI=${SPOTIFY_REDIRECT_URI}
+    restart: "no"

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Data files
+raw/
+*.duckdb
+
+# direnv
+.direnv/
+
+# Pip bootstrap
+get-pip.py
+
+# Secrets
+.envrc.local

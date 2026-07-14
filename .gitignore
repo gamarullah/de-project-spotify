@@ -9,6 +9,9 @@ raw/
 # direnv
 .direnv/
 
+# Logs
+logs/
+
 # Pip bootstrap
 get-pip.py
 

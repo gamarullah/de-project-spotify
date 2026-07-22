@@ -29,8 +29,8 @@ SELECT
         WHEN LENGTH(track.album_release_date) = 7
             THEN CAST(LEFT(track.album_release_date, 4) AS INTEGER)
         WHEN LENGTH(track.album_release_date) = 10
-            THEN YEAR(TRY_CAST(track.album_release_date AS DATE))
-        ELSE NULL
+            THEN CAST(YEAR(TRY_CAST(track.album_release_date AS DATE)) AS INTEGER)
+        ELSE NULL::INTEGER
     END AS album_release_year        
     ,track.popularity::INT popularity
     ,track.explicit::BOOLEAN explicit

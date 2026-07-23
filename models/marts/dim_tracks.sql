@@ -13,7 +13,7 @@ SELECT
     ,track_duration_ms
     ,explicit
     ,popularity
-FROM stg_recently_played
+FROM {{ ref('stg_recently_played') }}
 
 UNION ALL
 
@@ -27,7 +27,7 @@ SELECT
     ,duration_ms track_duration_ms
     ,explicit
     ,popularity
-FROM stg_top_tracks
+FROM {{ ref('stg_top_tracks') }}
 )
 
 SELECT *

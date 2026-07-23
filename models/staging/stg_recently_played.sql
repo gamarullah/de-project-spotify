@@ -18,20 +18,8 @@ SELECT
     ,track.artist_name::VARCHAR artist_name
     ,track.album_id::VARCHAR album_id
     ,track.album_name::VARCHAR album_name
-    ,CASE
-        WHEN LENGTH(TRIM(track.album_release_date)) = 10
-            THEN TRY_CAST(TRIM(track.album_release_date) AS DATE)
-        ELSE NULL
-    END AS album_release_date 
-    ,CASE
-        WHEN LENGTH(track.album_release_date) = 4
-            THEN CAST(track.album_release_date AS INTEGER)
-        WHEN LENGTH(track.album_release_date) = 7
-            THEN CAST(LEFT(track.album_release_date, 4) AS INTEGER)
-        WHEN LENGTH(track.album_release_date) = 10
-            THEN CAST(YEAR(TRY_CAST(track.album_release_date AS DATE)) AS INTEGER)
-        ELSE NULL::INTEGER
-    END AS album_release_year        
+    ,TRY_CAST(track.album_release_date AS DATE) AS album_release_date
+    ,TRY_CAST(LEFT(track.album_release_date, 4) AS INTEGER) AS album_release_year        
     ,track.popularity::INT popularity
     ,track.explicit::BOOLEAN explicit
     ,track.context_type::VARCHAR context_type

@@ -8,7 +8,7 @@ SELECT
     ,artist_id
     ,artist_name
     ,genres
-FROM stg_top_artists
+FROM {{ ref('stg_top_artists') }}
 
 UNION ALL
 
@@ -17,7 +17,7 @@ SELECT
     ,artist_id
     ,artist_name
     ,NULL AS genres
-FROM stg_top_tracks
+FROM {{ ref('stg_top_tracks') }}
 
 UNION ALL
 
@@ -26,7 +26,7 @@ SELECT
     ,artist_id
     ,artist_name
     ,NULL AS genres
-FROM stg_recently_played
+FROM {{ ref('stg_recently_played') }}
 )
 
 SELECT *

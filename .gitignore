@@ -1,19 +1,6 @@
-# Python
-__pycache__/
-*.pyc
 
-# Data files
-raw/
-*.duckdb
-
-# direnv
-.direnv/
-
-# Logs
+target/
+dbt_packages/
 logs/
-
-# Pip bootstrap
-get-pip.py
-
-# Secrets
-.envrc.local
+metabase-data/
+.env

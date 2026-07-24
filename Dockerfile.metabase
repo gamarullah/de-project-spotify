@@ -1,0 +1,21 @@
+FROM eclipse-temurin:21-jre
+
+RUN apt-get update && apt-get install -y wget && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /metabase-app/plugins && \
+    chmod -R 777 /metabase-app
+
+# Pin Metabase to v0.59.4 (compatible with DuckDB driver 1.5.2.0)
+RUN wget -O /metabase-app/metabase.jar \
+    https://downloads.metabase.com/v0.59.4/metabase.jar
+
+# DuckDB driver 1.5.2.0 (built for Metabase 59)
+RUN wget -O /metabase-app/plugins/duckdb.metabase-driver.jar \
+    https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/1.5.2.0/duckdb.metabase-driver.jar
+
+ENV MB_PLUGINS_DIR=/metabase-app/plugins
+
+EXPOSE 3000
+
+CMD ["java", "-jar", "/metabase-app/metabase.jar"]

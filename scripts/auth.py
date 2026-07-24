@@ -19,9 +19,7 @@ def get_spotify_client():
         client_secret=os.environ.get("SPOTIFY_CLIENT_SECRET"),
         redirect_uri=os.environ.get("SPOTIFY_REDIRECT_URI"),
         scope=" ".join(scopes),
-        cache_path=os.path.expanduser(
-            "~/.secrets/spotify_token_cache"
-        ),
+        cache_path=os.environ.get("SPOTIFY_TOKEN_CACHE", "/tmp/spotify_token_cache"),
         open_browser=False
     )
     

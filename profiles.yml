@@ -1,0 +1,7 @@
+de_project_spotify:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /app/analytics/spotify_analytics.duckdb
+      external_root: "/app"

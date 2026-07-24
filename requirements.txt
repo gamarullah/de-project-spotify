@@ -1,5 +1,7 @@
 spotipy
-duckdb
+duckdb==1.5.2
 pandas
 python-dotenv
 requests
+dbt-core
+dbt-duckdb

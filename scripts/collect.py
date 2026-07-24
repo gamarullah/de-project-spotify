@@ -178,9 +178,14 @@ def run_collection():
     print(f"{'='*50}")
     
     print("\n Authenticating with Spotify...")
-    sp = get_spotify_client()
-    user = sp.current_user()
-    print(f"Logged in as: {user['display_name']}")
+    try:
+        sp = get_spotify_client()
+        user = sp.current_user()
+        print(f"✓ Logged in as: {user['display_name']}")
+    except Exception as e:
+        print(f"✗ Authentication failed: {e}")
+        print("Token may have expired. Re-run: python scripts/auth.py")
+        sys.exit(1)
     
     recently_played = collect_recently_played(sp)
     save_json(

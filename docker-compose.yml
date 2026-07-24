@@ -2,13 +2,33 @@ services:
   spotify-collector:
     build: .
     container_name: spotify-collector
+    user: "1000:10"
     volumes:
+      - .:/app
       - ./raw:/app/raw
       - ./analytics:/app/analytics
       - ./scripts:/app/scripts
-      - /home/gamarullah/.secrets:/root/.secrets
+      - /home/gamarullah/.secrets:/home/gamarullah/.secrets
     environment:
       - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
       - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
       - SPOTIFY_REDIRECT_URI=${SPOTIFY_REDIRECT_URI}
+      - SPOTIFY_TOKEN_CACHE=${SPOTIFY_TOKEN_CACHE}
+      - DBT_PROFILES_DIR=/app
     restart: "no"
+
+  metabase:
+    build:
+      context: .
+      dockerfile: Dockerfile.metabase
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./metabase-data:/metabase-data
+      - ./analytics:/analytics
+    environment:
+      - MB_DB_TYPE=h2
+      - MB_DB_FILE=/metabase-data/metabase.db
+      - MB_PLUGINS_DIR=/metabase-app/plugins
+    restart: unless-stopped

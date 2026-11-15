@@ -1,128 +1,159 @@
 # de-project-spotify
 
-A personal end-to-end data engineering pipeline that collects, transforms, and visualizes my Spotify listening history — built on a self-hosted NAS.
+A personal end-to-end data engineering pipeline that collects, transforms, and visualizes my Spotify listening history, self-hosted on a NAS.
 
 ## Overview
 
-This project demonstrates a complete DE pipeline using modern open-source tools. Data is collected daily from the Spotify API, stored as raw JSON on a NAS, transformed using dbt + DuckDB, and visualized via a self-hosted Metabase dashboard.
+Data is collected twice a day from the Spotify Web API, stored as immutable-ish raw JSON on a NAS, transformed with dbt + DuckDB into a small dimensional model, and visualized in a self-hosted Metabase instance. All Python and dbt execution runs inside Docker, because the NAS operating system (UGOS) locks down system Python and build tools.
 
 ## Architecture
 
-Spotify API
-     ↓
-Python + Spotipy (collection scripts)
-     ↓
-Raw JSON storage (NAS)
-/raw/recently_played/YYYY-MM-DD.json
-/raw/top_tracks/YYYY-MM-DD.json
-/raw/top_artists/YYYY-MM-DD.json
-/raw/audio_features/YYYY-MM-DD.json
-     ↓
-dbt transformations
-     ↓
-DuckDB (analytics layer)
-     ↓
-Metabase (self-hosted dashboard)
+    Spotify Web API
+          |
+    Python + Spotipy  (Docker, scheduled by cron)
+          |
+    Raw JSON on NAS   raw/<type>/YYYY-MM-DD.json   (UTC timestamps)
+          |
+    dbt (staging views -> dimension tables + incremental fact)
+          |
+    DuckDB            analytics/spotify_analytics.duckdb
+          |
+    Metabase          (self-hosted, reachable over Tailscale)
 
 ## Data Collected
 
-- Recently played tracks — up to 50 tracks per collection run
-- Top tracks — short, medium, and long term rankings
-- Top artists — short, medium, and long term rankings
-- Audio features — danceability, energy, valence, tempo, and more
+- Recently played tracks (last 50 per run)
+- Top tracks: short, medium and long term
+- Top artists: short, medium and long term
+- Audio features for recently played tracks (availability depends on the Spotify API; the collector skips it on HTTP 403)
 
-Collection runs twice daily via cron job:
-- 13:00 WIB (06:00 UTC) — captures morning session
-- 23:58 WIB (16:58 UTC) — captures full day
+Schedule (cron, system clock in UTC):
+
+- 06:00 UTC (13:00 WIB): midday snapshot
+- 16:58 UTC (23:58 WIB): end-of-day snapshot
+
+A same-day rerun overwrites that day's file, so the last run of the day wins.
 
 ## Tech Stack
 
-Layer            | Tool
------------------|------------------------------------------
-Collection       | Python 3.11, Spotipy
-Orchestration    | Cron job
-Containerization | Docker, Docker Compose
-Storage          | NAS (UGREEN DXP2800), JSON files
-Transformation   | dbt-core 1.12, dbt-duckdb
-Analytics DB     | DuckDB 1.5.2
-Visualization    | Metabase v0.59.4 (self-hosted)
-Secret Mgmt      | direnv + ~/.secrets/
-Version Control  | Git, GitHub
+| Layer              | Tool                                              |
+|--------------------|---------------------------------------------------|
+| Collection         | Python (python:latest image), Spotipy             |
+| Scheduling         | cron via /etc/cron.d                              |
+| Containerization   | Docker, Docker Compose                            |
+| Storage            | UGREEN DXP2800 NAS, JSON files                    |
+| Transformation     | dbt-core 1.12, dbt-duckdb 1.10, dbt_utils 1.4     |
+| Analytics DB       | DuckDB 1.5.2 (pinned to match the Metabase driver)|
+| Visualization      | Metabase v0.59.4 + MotherDuck DuckDB driver 1.5.2 |
+| Secrets            | direnv + ~/.secrets (outside the repo)            |
+| Remote access      | Tailscale                                         |
 
 ## dbt Models
 
-models/
-├── staging/                      # Raw JSON → clean tabular views
-│   ├── stg_recently_played.sql
-│   ├── stg_top_tracks.sql
-│   ├── stg_top_artists.sql
-│   └── stg_audio_features.sql
-└── marts/                        # Analytics-ready tables
-    ├── dim_tracks.sql
-    ├── dim_artists.sql
-    ├── dim_albums.sql
-    ├── dim_audio_features.sql
-    └── fct_listening_history.sql
+    models/
+    +-- staging/                     views, read raw JSON via read_json()
+    |   +-- stg_recently_played.sql
+    |   +-- stg_top_tracks.sql
+    |   +-- stg_top_artists.sql
+    |   +-- stg_audio_features.sql
+    +-- marts/
+        +-- dim_tracks.sql           table, one row per track_id
+        +-- dim_artists.sql          table, one row per artist_id
+        +-- dim_albums.sql           table, one row per album_id
+        +-- dim_audio.sql            table, optional (sparse) track attributes
+        +-- fct_listening_history.sql  incremental, one row per listening event
+        +-- schema.yml               data tests
+
+Design notes:
+
+- Casting and cleanup happen once, in staging. Marts inherit clean types.
+- All timestamps stay in UTC. Local-time (WIB) columns belong in the transform layer and are not modeled yet.
+- Spotify returns partial release dates ("2001", "2001-09"). The pipeline keeps release_date as DATE only when it is a full date and derives release_year separately, rather than inventing a month or day.
+- Dimensions are deduplicated with QUALIFY ROW_NUMBER(), keeping the most recently collected row per key.
+- fct_listening_history is incremental on played_at, with the intended unique key (played_at, track_id, context_type).
+- Reserved words are renamed at staging (rank -> artist_rank / track_rank, key -> musical_key).
+
+## Data Tests
+
+- unique + not_null on the primary key of each dimension
+- not_null on played_at and track_id in the fact table
+- a unique-combination test on (played_at, track_id, context_type)
+- a singular test that fails if no data has been collected for 12 hours
+
+Status: the unique-combination test on fct_listening_history is currently failing (138 duplicate keys) and is being investigated.
 
 ## Project Structure
 
-de-project-spotify/
-├── scripts/
-│   ├── auth.py          # Spotify OAuth handling
-│   ├── collect.py       # Main collection script
-│   └── utils.py         # Helper functions
-├── models/              # dbt models (staging + marts)
-├── raw/                 # Raw JSON data (gitignored)
-├── analytics/           # DuckDB file (gitignored)
-├── logs/                # Collection logs (gitignored)
-├── Dockerfile           # Python collector image
-├── Dockerfile.metabase  # Custom Metabase + DuckDB image
-├── docker-compose.yml
-├── dbt_project.yml
-├── profiles.yml
-└── run_collection.sh    # Cron entry point
+    de-project-spotify/
+    +-- scripts/
+    |   +-- auth.py            Spotify OAuth client
+    |   +-- collect.py         collectors for each data type
+    |   +-- utils.py           paths and JSON helpers
+    +-- models/                dbt models and schema.yml
+    +-- tests/                 dbt singular tests
+    +-- dbt_project.yml
+    +-- profiles.yml
+    +-- packages.yml           dbt_utils
+    +-- Dockerfile             collector + dbt image
+    +-- Dockerfile.metabase    Metabase + DuckDB driver image
+    +-- docker-compose.yml
+    +-- run_collection.sh      cron entry point
+    +-- raw/                   private data, gitignored
+    +-- analytics/             DuckDB file, gitignored
+    +-- logs/                  run logs, gitignored
+    +-- metabase-data/         Metabase app DB, gitignored
 
 ## Setup
 
-### Prerequisites
+Prerequisites: Docker with Compose, direnv, a Spotify developer app (Web API), and a Premium account if your app is in development mode.
 
-- Docker + Docker Compose
-- direnv
-- Spotify Developer account
+1. Create ~/.secrets/spotify (chmod 600, directory chmod 700):
 
-### Environment Variables
-
-Create ~/.secrets/spotify:
-
-    export SPOTIFY_CLIENT_ID="your_client_id"
-    export SPOTIFY_CLIENT_SECRET="your_client_secret"
+    export SPOTIFY_CLIENT_ID="..."
+    export SPOTIFY_CLIENT_SECRET="..."
     export SPOTIFY_REDIRECT_URI="http://127.0.0.1:8080"
     export SPOTIFY_TOKEN_CACHE="/path/to/.secrets/spotify_token_cache"
 
-Create .envrc in project root:
+2. In the project root, .envrc contains one line, then run direnv allow:
 
     source ~/.secrets/spotify
 
-### First Run
+3. Make sure the directory holding the token cache is mounted into the container (see docker-compose.yml) and writable by the container user.
 
-    # Authenticate with Spotify (one-time manual OAuth)
+4. Authorize once (manual OAuth: open the printed URL, then paste the redirect URL back into the terminal):
+
     docker compose run --rm spotify-collector python scripts/auth.py
 
-    # Run collection + dbt
+5. Build and run the pipeline:
+
+    docker compose build
     ./run_collection.sh
 
-### Metabase
+6. Install dbt packages and run the tests:
 
-Access at http://your-nas-ip:3000
+    docker compose run --rm spotify-collector dbt deps
+    docker compose run --rm spotify-collector dbt test
 
-Connect to DuckDB:
-    Database file: /analytics/spotify_analytics.duckdb
+DuckDB allows a single writer, so run_collection.sh stops the Metabase container before dbt runs and starts it again afterwards. Do the same when running dbt by hand.
 
-## Project Status
+## Metabase
 
-- [x] Phase 1: Spotify API + OAuth authentication
-- [x] Phase 2: Collection scripts
-- [x] Phase 3: Automated cron job (twice daily)
-- [x] Phase 4: dbt transformations (9 models)
-- [x] Phase 5: Metabase self-hosted on NAS
-- [ ] Phase 6: Dashboard development
+IN PROGRESS
+
+## Known Limitations
+
+- Spotify only exposes the last 50 played tracks per call, so heavy listening between runs can be missed.
+- Cron has no failure alerting yet; failures are only visible in logs/.
+- Metabase is pinned to v0.59.4 for driver compatibility, and base images and most Python packages are not yet version-pinned.
+- Raw JSON is the only non-rebuildable data and has no backup yet.
+
+## Roadmap
+
+- [x] Spotify OAuth and collection scripts
+- [x] Scheduled collection (twice daily)
+- [x] dbt staging and dimensional models
+- [x] Metabase on NAS connected to DuckDB
+- [ ] Fix duplicate keys in fct_listening_history
+- [ ] Failure alerting for the cron job
+- [ ] WIB time dimensions (hour, weekday/weekend)
+- [ ] Dashboards

@@ -1,6 +1,23 @@
-
+# dbt
 target/
 dbt_packages/
 logs/
+
+# Private data
+raw/
+*.duckdb
+*.duckdb.wal
+
+# Metabase app DB
 metabase-data/
+
+# Python
+__pycache__/
+*.pyc
+
+# Secrets / caches
 .env
+.spotify_token_cache
+
+# direnv cache (.envrc is committed on purpose)
+.direnv/

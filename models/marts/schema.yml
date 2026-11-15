@@ -1,0 +1,43 @@
+models:
+
+  # DIMENSION
+  ## Albums
+  - name: dim_albums
+    columns:
+      - name: album_id
+        tests:
+          - unique
+          - not_null
+
+  ## Artists
+  - name: dim_artists
+    columns:
+      - name: artist_id
+        tests:
+          - unique
+          - not_null
+
+  ## Audio
+  - name: dim_audio
+    columns:
+      - name: track_id
+        tests:
+          - unique
+          - not_null
+
+  # FACT
+  ## Listening History
+  - name: fct_listening_history
+    columns:
+      - name: played_at
+        tests:
+          - not_null
+      - name: track_id
+        tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - context_type
+              - played_at
+              - track_id
